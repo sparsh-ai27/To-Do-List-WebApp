@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Information -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple To-Do List web application built with HTML, CSS and JavaScript">
+    <meta name="author" content="Devan">
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+        <h1>&#9745; My To-Do List</h1>
+        <p>A simple task manager built with <abbr title="HyperText Markup Language">HTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr> &amp; <abbr title="JavaScript">JS</abbr></p>
+    </header>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="#add-section">Add Task</a></li>
+            <li><a href="#todo-section">View Tasks</a></li>
+            <li><a href="#about-section">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="container">
+
+        <!-- Section 1: Add a To-Do -->
+        <section id="add-section" class="card">
+            <h2>Add a New Task</h2>
+            <hr>
+            <form id="todo-form">
+                <fieldset>
+                    <legend>Task Details</legend>
+                    <div class="form-group">
+                        <label for="task-input"><strong>Task Name:</strong></label>
+                        <input type="text" id="task-input" name="task" placeholder="Enter your task here..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority-select"><strong>Priority:</strong></label>
+                        <select id="priority-select" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-blue" type="submit">&#10010; Add Task</button>
+                </fieldset>
+            </form>
+        </section>
+
+        <!-- Section 2: Task List -->
+        <section id="todo-section" class="card">
+            <h2>Your Tasks</h2>
+            <hr>
+
+            <!-- Filter buttons -->
+            <div class="filter-bar">
+                <strong>Filter:</strong>
+                <button class="btn btn-small btn-filter active" data-filter="all">All</button>
+                <button class="btn btn-small btn-filter" data-filter="pending">Pending</button>
+                <button class="btn btn-small btn-filter" data-filter="completed">Completed</button>
+            </div>
+
+            <!-- Task counter -->
+            <p id="task-counter" class="task-counter">
+                Total: <span id="total-count">0</span> &bull;
+                Completed: <span id="done-count">0</span> &bull;
+                Pending: <span id="pending-count">0</span>
+            </p>
+
+            <!-- Table to display tasks -->
+            <div class="table-wrapper">
+                <table id="todo-table">
+                    <caption><em>List of all your to-do items</em></caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Task</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="todo-table-body">
+                        <!-- Rows inserted by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty state message -->
+            <div id="empty-message" class="empty-message" style="display: none;">
+                <p><strong>No tasks found!</strong></p>
+                <p>Create your first to-do using the form above. &#128512;</p>
+            </div>
+        </section>
+
+        <!-- Section 3: About -->
+        <section id="about-section" class="card">
+            <details>
+                <summary><strong>About This App</strong></summary>
+                <br>
+                <p>This is a <mark>client-side</mark> To-Do List application. All data is stored in your browser's <code>localStorage</code>, so no server is required.</p>
+                <br>
+                <h3>Features:</h3>
+                <ul>
+                    <li>&#10004; Add new tasks with priority levels</li>
+                    <li>&#10004; Edit existing tasks</li>
+                    <li>&#10004; Delete tasks</li>
+                    <li>&#10004; Mark tasks as completed</li>
+                    <li>&#10004; Filter tasks by status</li>
+                    <li>&#10004; Data persists across browser sessions</li>
+                </ul>
+                <br>
+                <h3>Technologies Used:</h3>
+                <ol>
+                    <li><abbr title="HyperText Markup Language version 5">HTML5</abbr> &mdash; Structure &amp; Semantics</li>
+                    <li><abbr title="Cascading Style Sheets version 3">CSS3</abbr> &mdash; Styling &amp; Layout</li>
+                    <li>JavaScript (<abbr title="ECMAScript 6">ES6</abbr>) &mdash; Interactivity &amp; Logic</li>
+                </ol>
+                <br>
+                <blockquote cite="https://en.wikipedia.org/wiki/Productivity">
+                    <p><em>&ldquo;Productivity is never an accident. It is always the result of a commitment to excellence.&rdquo;</em></p>
+                    <footer>&mdash; <cite>Paul J. Meyer</cite></footer>
+                </blockquote>
+            </details>
+        </section>
+
+    </main>
+
+    <!-- ===== UPDATE MODAL ===== -->
+    <div id="update-modal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h2>Update Task</h2>
+            <hr>
+            <form id="update-form">
+                <fieldset>
+                    <legend>Edit Details</legend>
+                    <div class="form-group">
+                        <label for="update-input"><strong>Task Name:</strong></label>
+                        <input type="text" id="update-input" name="task" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-priority"><strong>Priority:</strong></label>
+                        <select id="update-priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="update-id">
+                    <div class="modal-actions">
+                        <button class="btn btn-blue" type="submit">&#10004; Save</button>
+                        <button class="btn btn-grey" type="button" id="cancel-update">&#10006; Cancel</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <hr>
+        <p>&copy; 2026 <strong>Devan</strong>. All rights reserved.</p>
+        <p>Built with &#10084; using <abbr title="HyperText Markup Language">HTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr> &amp; <abbr title="JavaScript">JS</abbr></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
